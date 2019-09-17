@@ -167,14 +167,14 @@ public class Job5 {
         }
 
         Job job2 = Job.getInstance(conf, "job five part 2");
-        job1.setJarByClass(Job5.class);
-        job1.setMapperClass(Job5.GroupGenderMapper.class);
-        job1.setReducerClass(Job5.TransSolverReducer.class);
-        job1.setOutputKeyClass(Text.class);
-        job1.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job1, new Path("input")); // this need to be the file path to output from part 1
+        job2.setJarByClass(Job5.class);
+        job2.setMapperClass(Job5.GroupGenderMapper.class);
+        job2.setReducerClass(Job5.TransSolverReducer.class);
+        job2.setOutputKeyClass(Text.class);
+        job2.setOutputValueClass(Text.class);
+        FileInputFormat.addInputPath(job1, new Path("job_five_part1_output")); // this need to be the file path to output from part 1
         FileOutputFormat.setOutputPath(job1, new Path("job_five_output"));
-        if (!job1.waitForCompletion(true)) {
+        if (!job2.waitForCompletion(true)) {
             System.exit(1);
         }
     }
