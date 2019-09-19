@@ -3,4 +3,4 @@ custData = FOREACH custFile GENERATE CountryCode;
 countryCodeGroup = GROUP custData BY CountryCode;
 codeCount = FOREACH countryCodeGroup GENERATE FLATTEN(group) AS (CountryCode), COUNT(custData) AS total;
 outpit = FILTER codeCount BY total >= 5000 OR total <= 2000;
-STORE outpit INTO '/user/hadoop/output/PJob2.txt' USING PigStorage(',');
+STORE outpit INTO '/user/hadoop/output/PJob3.txt' USING PigStorage(',');
