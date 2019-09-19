@@ -1,14 +1,12 @@
 custFile = LOAD '/user/hadoop/input2/customers.txt' USING PigStorage(',') AS (CID:int, Name:chararray, Age:int, Gender:chararray, CountryCode:int, Salary:float);
 custData = FOREACH custFile GENERATE CID, Name;
-
 transFile = LOAD '/user/hadoop/input2/transactions.txt' USING PigStorage(',') AS (TID:int, CID:int, TTotal:float, TNI:int, TD:chararray);
 transData = FOREACH transFile GENERATE CID;
 transGroup = GROUP transData BY CID;
 transCount = FOREACH transGroup GENERATE FLATTEN(group) AS (CID), COUNT(transData) AS TransTotal;
 temp = GROUP transCount ALL;
-minTVal = FOREACH temp GENERATE MIN(transCount.TransTotal);
-minCust = FILTER transCount BY TransTotal == 1;
+minTVal = FOREACH temp GENERATE MIN(transCount.TransTotal) AS minV;
+minCust = FILTER transCount BY TransTotal == minTVal.minV;
 fJoin = JOIN custData BY CID, minCust BY CID;
-outpit = FOREACH fJoin GENERATE Name, TransTotal;
-
-STORE outpit INTO '/user/hadoop/output/PJob1.txt' USING PigStorage(',');
+output = FOREACH fJoin GENERATE Name, TransTotal;
+STORE output INTO '/user/hadoop/output/PJob1.txt' USING PigStorage(',');
