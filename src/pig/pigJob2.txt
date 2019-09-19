@@ -1,8 +1,9 @@
 custFile = LOAD '/user/hadoop/input2/customers.txt' USING PigStorage(',') AS (CID:int, Name:chararray, Age:int, Gender:chararray, CountryCode:int, Salary:float);
-cust = FOREACH custFile GENERATE CID, Name;
+cust = FOREACH custFile GENERATE CID, Name, Salary;
 transFile = LOAD '/user/hadoop/input2/transactions.txt' USING PigStorage(',') AS (TID:int, CID:int, TTotal:float, TNI:int, TD:chararray);
 transData = FOREACH transFile GENERATE CID, TTotal, TNI;
 transGroup = GROUP transData BY CID;
-transCount = FOREACH transGroup GENERATE FLATTEN(group) AS (CID), COUNT(transData) AS TransTotal, SUM(transData.TTotal), MIN(transData.TNI);
+transCount = FOREACH transGroup GENERATE FLATTEN(group) AS (CID), COUNT(transData) AS TransTotal, SUM(transData.TTotal) AS sm, MIN(transData.TNI) AS mn;
 fJoin = JOIN transCount BY CID, custFile BY CID USING 'replicated';
-STORE fJoin INTO '/user/hadoop/output/PJob2.txt' USING PigStorage(',');
+outpit = FOREACH fJoin GENERATE Name, Salary, TransTotal, sm, mn;
+STORE outpit INTO '/user/hadoop/output/PJob2.txt' USING PigStorage(',');
