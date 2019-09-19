@@ -8,5 +8,5 @@ temp = GROUP transCount ALL;
 minTVal = FOREACH temp GENERATE MIN(transCount.TransTotal) AS minV;
 minCust = FILTER transCount BY TransTotal == minTVal.minV;
 fJoin = JOIN custData BY CID, minCust BY CID;
-output = FOREACH fJoin GENERATE Name, TransTotal;
-STORE output INTO '/user/hadoop/output/PJob1.txt' USING PigStorage(',');
+outpit = FOREACH fJoin GENERATE Name, TransTotal;
+STORE outpit INTO '/user/hadoop/output/PJob1.txt' USING PigStorage(',');
