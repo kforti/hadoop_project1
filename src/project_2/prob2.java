@@ -144,8 +144,8 @@ public class Proj2Prob2 {
                 totaly += partTotaly;
                 totalCount += partTotalc;
             }
-            newX = (float) (totalx / totalCount);
-            newY = (float) (totaly / totalCount);
+            newX = ((float) totalx) / ((float) totalCount);
+            newY = ((float) totaly) / ((float) totalCount);
             keyOut = Float.toString(newX) + "," + Float.toString(newY);
             context.write(new Text(keyOut), new Text(""));
         }
@@ -245,6 +245,11 @@ public class Proj2Prob2 {
             }
 
             INITIAL_K_FILE = output + itt + "/part-r-00000";
+            if (itt > 0) {
+                FileSystem fsd = FileSystem.get(new Configuration());
+                Path p = new Path(output + (itt - 1));
+                fsd.delete(p, true);
+            }
             itt += 1;
             if (itt == 6) {
                 isDone = true;
