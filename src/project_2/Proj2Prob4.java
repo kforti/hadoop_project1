@@ -153,22 +153,31 @@ public class Proj2Prob4 {
                 py = Integer.parseInt(data[1]);
                 alx.add(px);
                 aly.add(py);
-                if ((px > bLx) && (px < bRx) && (py > bTy) && (py > bBy)) {
+                if ((px > bLx) && (px < bRx) && (py > bTy) && (py < bBy)) {
+                    ibx.add(px);
+                    iby.add(py);
+                } else if (((px == bLx) || (px == bRx)) && ((py > bTy) && (py < bBy)) && ((px / bl) == bx)) {
+                    ibx.add(px);
+                    iby.add(py);
+                } else if (((px > bLx) && (px < bRx)) && ((py == bTy) || (py == bBy)) && ((py / bl) == by)) {
+                    ibx.add(px);
+                    iby.add(py);
+                } else if (((px == bLx) || (px == bRx)) && ((py == bTy) || (py == bBy)) && (((px / bl) == bx) && ((py / bl) == by))) {
                     ibx.add(px);
                     iby.add(py);
                 }
             }
 
             for (int j = 0; j < ibx.size(); j++) {
-                int c = -1;
+                int c = -1; //copy of the same processing point will be in the all-points array as well so taking that into account start at -1 instead of 0
                 for (int i = 0; i < alx.size(); i++) {
-                    double dist = Math.sqrt((ibx.get(j) - alx.get(i)) * (ibx.get(j) - alx.get(i)) + (iby.get(j) - aly.get(i)) * (iby.get(j) - aly.get(i)));
-                    if (dist >= (double) r) {
-                        c = +c;
+                    double dist = Math.sqrt(((ibx.get(j) - alx.get(i)) * (ibx.get(j) - alx.get(i))) + ((iby.get(j) - aly.get(i)) * (iby.get(j) - aly.get(i))));
+                    if (dist <= r) {
+                        c = c + 1;
                     }
                 }
                 if (c < k) {
-                    context.write(new Text(px + "," + py), new Text(""));
+                    context.write(new Text(ibx.get(j) + "," + iby.get(j)), new Text(""));
                 }
             }
         }
@@ -198,5 +207,7 @@ public class Proj2Prob4 {
         FileInputFormat.setInputPaths(job, input);
         FileOutputFormat.setOutputPath(job, new Path(output));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
+
+
     }
 }
