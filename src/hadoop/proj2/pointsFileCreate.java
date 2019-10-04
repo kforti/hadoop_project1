@@ -22,9 +22,11 @@ public class pointsFileCreate {
 
             fw = new FileWriter(pointsFilePath);
             bw = new BufferedWriter(fw);
-            int loop = 11000000;
+            int loop = 11000000; //given number of points to create 100 MB file
 
+            //loop through and create the given number of points and write it to file
             for(int i=0; i < loop; i++) {
+                //randomly generate the x and y coordinates for each point
                 x = getRandomNumberInRange(0, 10000);
                 y = getRandomNumberInRange(0, 10000);
                 if(i < (loop-1)) {
@@ -64,8 +66,9 @@ public class pointsFileCreate {
 
             fw = new FileWriter(kCentroidsFilePath);
             bw = new BufferedWriter(fw);
-            int knum = getRandomNumberInRange(10,100);
+            int knum = getRandomNumberInRange(10,100);  //randomly generated number of centroids
 
+            //for each centroid generate random coordinates and write them to file
             for(int i=0; i < knum; i++) {
                 x = getRandomNumberInRange(0, 10000);
                 y = getRandomNumberInRange(0, 10000);
@@ -95,10 +98,11 @@ public class pointsFileCreate {
 
     private static int getRandomNumberInRange(int min, int max) {
         Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+        return r.nextInt((max - min) + 1) + min;     //get a random number in range
     }
 
     public static void main(String[] args) {
+        //create the input files
         pointsFileCreate p = new pointsFileCreate();
         p.genKCentroidsData();
         p.genPointsData();
