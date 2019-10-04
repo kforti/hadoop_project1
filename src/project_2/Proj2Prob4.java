@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.apache.hadoop.proj2.prob4;
+package hadoop.proj2.prob4;
 
 import java.io.IOException;
 import java.util.*;
