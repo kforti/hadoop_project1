@@ -1,23 +1,22 @@
 /**
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package hadoop.proj2.prob2;
+package hadoop.proj2;
 
 import java.io.IOException;
 import java.util.*;
 import java.io.*;
-import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -39,7 +38,8 @@ public class Proj2Prob2 {
     public static class KSort extends Mapper<Object, Text, Text, Text> {
         List<Float> kX = new ArrayList<Float>();
         List<Float> kY = new ArrayList<Float>();
-        public void setup(Context context) throws IOException, InterruptedException{
+
+        public void setup(Context context) throws IOException, InterruptedException {
             try {
                 Configuration config = context.getConfiguration();
                 Path[] cacheFiles = DistributedCache.getLocalCacheFiles(config);
@@ -68,8 +68,8 @@ public class Proj2Prob2 {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             String keyO = "";
             String data = "";
-            int x = -10000000;
-            int y = -10000000;
+            int x = 0;
+            int y = 0;
             float dist = 0;
             float minDist = Float.MAX_VALUE;
             float minkX = 0;
@@ -80,9 +80,9 @@ public class Proj2Prob2 {
             String[] entries = line.split(",");
             x = Integer.parseInt(entries[0]);
             y = Integer.parseInt(entries[1]);
-            for(int i=0; i<kX.size(); i++){
-                dist = (float) Math.sqrt(((kX.get(i)-x)*(kX.get(i)-x))+((kY.get(i)-y)*(kY.get(i)-y)));
-                if(dist < minDist){
+            for (int i = 0; i < kX.size(); i++) {
+                dist = (float) Math.sqrt(((kX.get(i) - x) * (kX.get(i) - x)) + ((kY.get(i) - y) * (kY.get(i) - y)));
+                if (dist < minDist) {
                     minDist = dist;
                     minkX = kX.get(i);
                     minkY = kY.get(i);
@@ -101,10 +101,10 @@ public class Proj2Prob2 {
             int sum_totaly = 0;
             int count = 0;
             String dataOut = "";
-            int x = -1000000;
-            int y = -1000000;
+            int x = 0;
+            int y = 0;
 
-            for (Text value:values) {
+            for (Text value : values) {
                 String v = value.toString();
                 String[] data = v.split(",");
                 x = Integer.parseInt(data[0]);
@@ -127,12 +127,12 @@ public class Proj2Prob2 {
             int totalx = 0;
             int totaly = 0;
             int totalCount = 0;
-            int partTotalx = -100000;
-            int partTotaly = -100000;
-            int partTotalc = -100000;
+            int partTotalx = 0;
+            int partTotaly = 0;
+            int partTotalc = 0;
             String keyOut = "";
 
-            for (Text value:values) {
+            for (Text value : values) {
                 String v = value.toString();
                 String[] data = v.split(",");
                 partTotalx = Integer.parseInt(data[0]);
@@ -143,13 +143,12 @@ public class Proj2Prob2 {
                 totaly += partTotaly;
                 totalCount += partTotalc;
             }
-            newX = ((float)totalx)/((float)totalCount);
-            newY = ((float)totaly)/((float)totalCount);
+            newX = ((float) totalx) / ((float) totalCount);
+            newY = ((float) totaly) / ((float) totalCount);
             keyOut = Float.toString(newX) + "," + Float.toString(newY);
             context.write(new Text(keyOut), new Text(""));
         }
     }
-
 
 
     public static void main(String[] args) throws Exception {
@@ -163,7 +162,7 @@ public class Proj2Prob2 {
             System.exit(2);
         }
 
-        while(isDone == false){
+        while (isDone == false) {
             Configuration conf = new Configuration();
             Path initKPath = new Path(INITIAL_K_FILE);
             DistributedCache.addCacheFile(initKPath.toUri(), conf);
@@ -177,7 +176,7 @@ public class Proj2Prob2 {
             job.setOutputKeyClass(Text.class);
             job.setOutputValueClass(Text.class);
             FileInputFormat.setInputPaths(job, input);
-            FileOutputFormat.setOutputPath(job, new Path(output+itt));
+            FileOutputFormat.setOutputPath(job, new Path(output + itt));
             boolean finished = job.waitForCompletion(true);
 
 
@@ -201,7 +200,7 @@ public class Proj2Prob2 {
             }
             br.close();
 
-            Path prevfile = new Path(output+itt + "/part-r-00000");
+            Path prevfile = new Path(output + itt + "/part-r-00000");
             FileSystem fs1 = FileSystem.get(new Configuration());
             BufferedReader br1 = new BufferedReader(new InputStreamReader(fs1.open(prevfile)));
             String l = br1.readLine();
@@ -222,7 +221,7 @@ public class Proj2Prob2 {
             boolean xSame = false;
             boolean ySame = false;
 
-            for (int i=0; i<newX.size(); i++) {
+            for (int i = 0; i < newX.size(); i++) {
                 if (Math.abs(oldX.get(i) - newX.get(i)) <= 0.1) {
                     xSame = true;
                 } else {
@@ -231,7 +230,7 @@ public class Proj2Prob2 {
                 }
             }
 
-            for (int j=0; j<newX.size(); j++) {
+            for (int j = 0; j < newX.size(); j++) {
                 if (Math.abs(oldY.get(j) - newY.get(j)) <= 0.1) {
                     ySame = true;
                 } else {
@@ -240,18 +239,18 @@ public class Proj2Prob2 {
                 }
             }
 
-            if(xSame && ySame){
+            if (xSame && ySame) {
                 isDone = true;
             }
 
-            INITIAL_K_FILE = output+itt + "/part-r-00000";
-            if(itt>0){
+            INITIAL_K_FILE = output + itt + "/part-r-00000";
+            if (itt > 0) {
                 FileSystem fsd = FileSystem.get(new Configuration());
-                Path p = new Path(output + (itt-1));
+                Path p = new Path(output + (itt - 1));
                 fsd.delete(p, true);
             }
             itt += 1;
-            if(itt == 6){
+            if (itt == 6) {
                 isDone = true;
             }
         }

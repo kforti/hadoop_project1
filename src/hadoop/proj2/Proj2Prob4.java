@@ -12,12 +12,10 @@
  * limitations under the License.
  */
 
-package hadoop.proj2.prob4;
+package hadoop.proj2;
 
 import java.io.IOException;
 import java.util.*;
-import java.io.*;
-import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -50,14 +48,14 @@ public class Proj2Prob4 {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             int r = Integer.parseInt(rTmp);
             int bl = r * 2;
-            int px = -10000000;
-            int py = -10000000;
-            int bx = -10000000;
-            int by = -10000000;
-            int bLx = -10000000;
-            int bRx = -10000000;
-            int bTy = -10000000;
-            int bBy = -10000000;
+            int px = 0;
+            int py = 0;
+            int bx = 0;
+            int by = 0;
+            int bLx = 0;
+            int bRx = 0;
+            int bTy = 0;
+            int bBy = 0;
 
             String line;
             Path filePath = ((FileSplit) context.getInputSplit()).getPath();
@@ -128,14 +126,14 @@ public class Proj2Prob4 {
             int r = Integer.parseInt(rTmp);
             int k = Integer.parseInt(kTmp);
             int bl = r * 2;
-            int bx = -10000000;
-            int by = -10000000;
-            int bLx = -10000000;
-            int bRx = -10000000;
-            int bTy = -10000000;
-            int bBy = -10000000;
-            int px = -10000000;
-            int py = -10000000;
+            int bx = 0;
+            int by = 0;
+            int bLx = 0;
+            int bRx = 0;
+            int bTy = 0;
+            int bBy = 0;
+            int px = 0;
+            int py = 0;
 
             String box = key.toString();
             String[] boxData = box.split(",");
